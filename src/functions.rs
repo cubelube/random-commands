@@ -117,21 +117,18 @@ fn echo(input: String) -> String
     String::from(input)
 }
 
-fn bin_to_dec(input: String) -> i32
+fn bin_to_dec(mut input: i32) -> i32
 {
-    let mut length = input.len();
     let mut exp = 0;
-    let mut input: i32 = input.parse().expect("failed");
     let mut sum: i32 = 0;
 
-    while length > 0
+    while input > 0
     {
         if input % 10 != 0
         {
             sum += i32::pow(2, exp);
         }
 
-        length -= 1;
         exp += 1;
         input /= 10
     }
