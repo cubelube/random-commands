@@ -11,3 +11,5 @@ Remake of   cat
 Remake of echo  
 Binary to decimal converter  
 Decimal to binary converter
+Hexadecimal to decimal converter
+Decimal to hexadecimal converter
