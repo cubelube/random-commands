@@ -36,19 +36,23 @@ pub fn perform()
 
         "print" => println!("{}", echo(env::args().nth(2).expect("failed"))),
 
-        "bin" => println!("{}", bin_to_dec(env::args().nth(2).expect("failed"))),
+        "bin" => println!("{}", bin_to_dec(env::args().nth(2).expect("failed").parse().expect("failed"))),
 
         "dec" => println!("{}", dec_to_bin(env::args().nth(2).expect("failed").parse().expect("failed"))),
+
+        "hex" => println!("{}", hex_to_dec(env::args().nth(2).expect("failed"))),
+
+        "hdec" => println!("{}", dec_to_hex(env::args().nth(2).expect("failed").parse().expect("failed"))),
 
         _ =>
         {
             println!("\n{}", "SYNTAX".bright_cyan().bold().underline());
-            println!("\n{} {} {}", "READ FILE:".yellow(), "cargo run -- read".bold(), "\"path_to_file\"".green().bold());
-            println!("{} {} {}", "FIND IN FILE:".yellow(), "cargo run -- find".bold(), "\"search_string\" \"path_to_file\"".green().bold());
-            println!("{}", "^ TOGGLEABLE LINE COUNTER: Append \"true\" or \"false\" to the end of command to toggle line counters\n".blue().bold());
-            println!("{} {} {}", "ECHO:".yellow(), "cargo run -- print".bold(), "\"string\"".green().bold());
-            println!("{} {} {}", "BINARY TO DECIMAL:".yellow(), "cargo run -- bin".bold(), "\"binary_number\"".green().bold());
-            println!("{} {} {}", "DECIMAL TO BINARY:".yellow(), "cargo run -- dec".bold(), "\"decimal_number\"".green().bold());
+            println!("\n{} {} {}", "READ FILE:".yellow(), "cargo run -- read".bold(), r#""path_to_file""#.green().bold());
+            println!("{} {} {}", "FIND IN FILE:".yellow(), "cargo run -- find".bold(), r#""search_string" "path_to_file""#.green().bold());
+            println!("{}", r#"^ TOGGLEABLE LINE COUNTER: Append "true" or "false" to the end of command to toggle line counters\n"#.blue().bold());
+            println!("{} {} {}", "ECHO:".yellow(), "cargo run -- print".bold(), r#""string""#.green().bold());
+            println!("{} {} {}", "BINARY TO DECIMAL:".yellow(), "cargo run -- bin".bold(), r#""binary_number""#.green().bold());
+            println!("{} {} {}", "DECIMAL TO BINARY:".yellow(), "cargo run -- dec".bold(), r#""decimal_number""#.green().bold());
         }
     };
 }
@@ -145,6 +149,110 @@ fn dec_to_bin(mut input: i32) -> String
         sum.push_str(&(input % 2).to_string());
 
         input /= 2;
+    }
+
+    sum.chars().rev().collect::<String>()
+}
+
+fn hex_to_dec(mut input: String) -> i32
+{
+    let mut exp = 0;
+    let mut sum: i32 = 0;
+
+    while input.len() > 0
+    {
+        let last_digit = input.chars().last().unwrap();
+
+        match last_digit
+        {
+            '0' => sum += 0,
+
+            '1' => sum += i32::pow(16, exp),
+
+            '2' => sum += 2 * i32::pow(16, exp),
+
+            '3' => sum += 3 * i32::pow(16, exp),
+
+            '4' => sum += 4 * i32::pow(16, exp),
+
+            '5' => sum += 5 * i32::pow(16, exp),
+
+            '6' => sum += 6 * i32::pow(16, exp),
+
+            '7' => sum += 7 * i32::pow(16, exp),
+
+            '8' => sum += 8 * i32::pow(16, exp),
+
+            '9' => sum += 9 * i32::pow(16, exp),
+
+            'A' => sum += 10 * i32::pow(16, exp),
+
+            'B' => sum += 11 * i32::pow(16, exp),
+
+            'C' => sum += 12 * i32::pow(16, exp),
+
+            'D' => sum += 13 * i32::pow(16, exp),
+
+            'E' => sum += 14 * i32::pow(16, exp),
+
+            'F' => sum += 15 * i32::pow(16, exp),
+
+            _ => panic!("you entered an invalid character!\nValid hexadecimal characters:\n0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F")
+        };
+
+        exp += 1;
+        input.pop();
+    }
+
+    sum
+}
+
+fn dec_to_hex(mut input: i32) -> String
+{
+    let mut sum = String::new();
+    
+    while input > 0
+    {
+        let rem = input % 16;
+        input /= 16;
+
+            match rem
+            {
+                0 => sum.push('0'),
+                
+                1 => sum.push('1'),
+
+                2 => sum.push('2'),
+
+                3 => sum.push('3'),
+
+                4 => sum.push('4'),
+
+                5 => sum.push('5'),
+
+                6 => sum.push('6'),
+
+                7 => sum.push('7'),
+
+                8 => sum.push('8'),
+
+                9 => sum.push('9'),
+
+                10 => sum.push('A'),
+
+                11 => sum.push('B'),
+
+                12 => sum.push('C'),
+
+                13 => sum.push('D'),
+
+                14 => sum.push('E'),
+
+                15 => sum.push('F'),
+
+                _ => panic!("something went wrong!")
+            };
+
     }
 
     sum.chars().rev().collect::<String>()
